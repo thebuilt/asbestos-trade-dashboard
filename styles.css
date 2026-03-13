@@ -1,0 +1,390 @@
+:root {
+  --bg: #f4efe7;
+  --ink: #152333;
+  --muted: #59697b;
+  --panel: rgba(255, 250, 244, 0.94);
+  --panel-strong: rgba(255, 246, 236, 0.98);
+  --line: rgba(50, 74, 96, 0.16);
+  --shadow: 0 20px 50px rgba(46, 59, 72, 0.12);
+  --import-1: #fff5cc;
+  --import-2: #f7ab3f;
+  --import-3: #b65216;
+  --export-1: #d7f4f3;
+  --export-2: #3fbcb1;
+  --export-3: #045a74;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(700px 340px at 0% 0%, rgba(221, 138, 66, 0.18), transparent 58%),
+    radial-gradient(820px 360px at 100% 0%, rgba(64, 177, 171, 0.18), transparent 55%),
+    linear-gradient(180deg, #f8f2ea 0%, var(--bg) 55%, #efe4d8 100%);
+}
+
+.page-shell {
+  width: min(1480px, 95%);
+  margin: 0 auto;
+  padding: 24px 0 34px;
+}
+
+.hero,
+.insight-strip,
+.control-grid,
+.bottom-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.hero {
+  grid-template-columns: 1.35fr 1fr;
+  align-items: end;
+}
+
+.hero-copy,
+.stat-card,
+.panel,
+.insight-card {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  padding: 22px;
+}
+
+.eyebrow,
+.panel-kicker,
+.insight-kicker,
+.summary-label,
+.stat-label,
+.legend-label,
+.field span {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.73rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: "Sora", "IBM Plex Sans", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  margin-top: 8px;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  line-height: 1.02;
+  max-width: 12ch;
+}
+
+.intro {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 78ch;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.stat-card {
+  padding: 18px;
+}
+
+.stat-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.insight-strip {
+  margin-top: 14px;
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.insight-card {
+  padding: 16px 18px;
+}
+
+.insight-card p,
+.footnote,
+.detail-body {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+code {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(25, 42, 60, 0.92);
+  color: #f5fbff;
+  overflow-x: auto;
+  font-size: 0.83rem;
+}
+
+.control-grid {
+  margin-top: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.panel {
+  overflow: hidden;
+}
+
+.compact-panel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.panel-head {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.source-link {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.toolbar {
+  padding: 14px 18px 10px;
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  padding: 12px 14px;
+  font: inherit;
+}
+
+.legend-block {
+  display: grid;
+  gap: 6px;
+}
+
+.legend-bar {
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 32, 46, 0.12);
+}
+
+.import-gradient {
+  background: linear-gradient(90deg, var(--import-1), var(--import-2), var(--import-3));
+}
+
+.export-gradient {
+  background: linear-gradient(90deg, var(--export-1), var(--export-2), var(--export-3));
+}
+
+.legend-range {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.map-frame {
+  padding: 0 18px 14px;
+}
+
+.map-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.zoom-btn {
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+  color: var(--ink);
+  border-radius: 999px;
+  min-width: 42px;
+  height: 42px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.zoom-btn.wide {
+  padding: 0 16px;
+}
+
+svg {
+  width: 100%;
+  display: block;
+  min-height: 420px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 239, 0.95), rgba(255, 243, 229, 0.95)),
+    radial-gradient(circle at 20% 20%, rgba(255, 228, 193, 0.55), transparent 35%);
+  border: 1px solid rgba(56, 73, 92, 0.1);
+  cursor: grab;
+}
+
+svg.dragging {
+  cursor: grabbing;
+}
+
+.map-summary {
+  padding: 0 18px 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.map-summary strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.bottom-grid {
+  margin-top: 14px;
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 11px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: var(--panel-strong);
+  z-index: 1;
+  font-size: 0.8rem;
+}
+
+td {
+  font-size: 0.92rem;
+}
+
+.detail-box {
+  padding: 16px 18px 6px;
+}
+
+.detail-title {
+  margin: 0;
+  font-family: "Sora", "IBM Plex Sans", sans-serif;
+  font-size: 1.02rem;
+}
+
+.rank-wrap {
+  max-height: 420px;
+}
+
+.footnote {
+  margin-top: 14px;
+  padding: 0 4px;
+  font-size: 0.88rem;
+}
+
+.country {
+  stroke: rgba(67, 88, 108, 0.42);
+  stroke-width: 0.5;
+}
+
+.country.active {
+  stroke: #122130;
+  stroke-width: 1.2;
+}
+
+.map-label {
+  font-size: 12px;
+  fill: #304457;
+}
+
+.map-badge {
+  fill: rgba(255, 252, 246, 0.96);
+  stroke: rgba(51, 72, 92, 0.18);
+}
+
+@media (max-width: 1100px) {
+  .hero,
+  .control-grid,
+  .bottom-grid,
+  .insight-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  .page-shell {
+    width: min(95%, 100%);
+  }
+
+  .hero-stats,
+  .map-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  th,
+  td {
+    padding: 10px 12px;
+  }
+
+  svg {
+    min-height: 340px;
+  }
+}
