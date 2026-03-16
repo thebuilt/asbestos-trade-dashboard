@@ -343,6 +343,13 @@ function renderRanking(side, dataset, countryName) {
   });
 
   if (!countryName) {
+    if (side === "relay") {
+      dom.detailTitle.textContent = "Probable onward destinations";
+      dom.detailBody.textContent =
+        "Current relay dataset: " + dataset.reporterName + " exporting " + dataset.description + ". This is not proof of final use, but it helps narrow the likely downstream markets after the first import partner.";
+      return;
+    }
+
     dom.detailTitle.textContent = (side === "imports" ? "Import" : "Export") + " leaderboard";
     dom.detailBody.textContent =
       "Current dataset: " + dataset.description + ". Top-ranked partners are ordered by trade value in USD thousand.";
@@ -358,7 +365,7 @@ function renderRanking(side, dataset, countryName) {
 
   dom.detailTitle.textContent = match.name;
   dom.detailBody.textContent =
-    (side === "imports" ? "Import source" : "Export market") +
+    (side === "imports" ? "Import source" : side === "relay" ? "Probable onward market" : "Export market") +
     " for " + dataset.description +
     ". Trade value: " + formatUsdK(match.valueUsdK) +
     ". Quantity: " + formatKg(match.quantityKg) +
@@ -467,18 +474,24 @@ function renderMap(side, dataset, svgId) {
     })
     .on("click", function (_, feature) {
       const rawName = feature.properties && feature.properties.name ? feature.properties.name : "";
-      state.activeSide = side;
-      state.activeCountryName = rawName;
+      if (side === "imports" || side === "exports") {
+        state.activeSide = side;
+        state.activeCountryName = rawName;
+      }
       if (side === "exports") {
         state.relayTargetCountryName = rawName;
+        dom.relaySelect.value = findRelayReporterByName(rawName)?.reporterCode || dom.relaySelect.value;
       }
-      renderDashboard();
+      if (side !== "relay") {
+        renderDashboard();
+      }
     });
 
   const zoom = createZoom(svgId, root);
-  document.getElementById(side === "imports" ? "import-zoom-in" : "export-zoom-in").onclick = zoom.zoomIn;
-  document.getElementById(side === "imports" ? "import-zoom-out" : "export-zoom-out").onclick = zoom.zoomOut;
-  document.getElementById(side === "imports" ? "import-zoom-reset" : "export-zoom-reset").onclick = zoom.reset;
+  const prefix = side === "imports" ? "import" : side === "exports" ? "export" : "relay";
+  document.getElementById(prefix + "-zoom-in").onclick = zoom.zoomIn;
+  document.getElementById(prefix + "-zoom-out").onclick = zoom.zoomOut;
+  document.getElementById(prefix + "-zoom-reset").onclick = zoom.reset;
 }
 
 function renderRelayMap(dataset) {
@@ -511,7 +524,11 @@ function renderDashboard() {
   renderMap("imports", importDataset, "#import-map");
   renderMap("exports", exportDataset, "#export-map");
   renderRelayMap(relayDataset);
-  renderRanking(state.activeSide, state.activeSide === "imports" ? importDataset : exportDataset, state.activeCountryName);
+  if (relayDataset) {
+    renderRanking("relay", relayDataset, "");
+  } else {
+    renderRanking(state.activeSide, state.activeSide === "imports" ? importDataset : exportDataset, state.activeCountryName);
+  }
 
   if (!relayDataset) {
     dom.detailTitle.textContent = state.relayTargetCountryName || "Relay partner";

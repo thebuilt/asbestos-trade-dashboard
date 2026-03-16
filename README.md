@@ -6,7 +6,8 @@ Static dashboard for India's asbestos trade using public WITS country trade page
 
 - Import map for India's raw asbestos inflows
 - Export map for India's asbestos-related product outflows
-- Zoom, pan, reset controls on both world maps
+- Re-export trail map for a clicked export partner, seeded with UAE onward exports
+- Zoom, pan, reset controls on all world maps
 - Gradient legends so the darkest country is the largest trade partner
 - India HSN to WITS HS6 mapping table
 
@@ -16,6 +17,7 @@ Static dashboard for India's asbestos trade using public WITS country trade page
 - `styles.css`: dashboard styling
 - `app.js`: world-map rendering, zoom/pan, rankings
 - `data/trade-data.json`: curated trade dataset and HSN mapping
+- `data/reexports-data.json`: onward-export datasets for selected partner countries
 - `data/countries-110m.json`: world topology
 - `vendor/`: local D3 and TopoJSON runtime files
 
@@ -44,6 +46,13 @@ WITS HS6 pages because:
 
 If you later get authenticated raw-trade access, `data/trade-data.json` can be extended to India HS8
 without changing the UI structure.
+
+## Re-export layer
+
+The relay map is meant to get closer to likely end-user markets when a first destination may be acting
+as a transit or trade hub. It does not prove final consumption, but it gives a more grounded second
+step than stopping at the first import partner. The first seeded relay reporter is the United Arab
+Emirates.
 
 ## Small-country note
 
