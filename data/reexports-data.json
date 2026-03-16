@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Re-export trail data",
+    "notes": [
+      "This layer is directional evidence, not proof of final consumption. It shows onward exports from a clicked partner country for the same HS6 code.",
+      "UAE was seeded first because it appears as a likely transit or trade hub in the current India export map."
+    ]
+  },
+  "reporters": [
+    {
+      "reporterCode": "ARE",
+      "reporterName": "United Arab Emirates",
+      "datasets": [
+        {
+          "year": 2023,
+          "hs6": "681290",
+          "description": "Asbestos fabricated products nes",
+          "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/ARE/year/2023/tradeflow/Exports/partner/ALL/product/681290",
+          "totalValueUsdK": 169.96,
+          "totalQuantityKg": 151662,
+          "countries": [
+            { "name": "Pakistan", "valueUsdK": 145.38, "quantityKg": 142605 },
+            { "name": "Oman", "valueUsdK": 7.11, "quantityKg": 2433 },
+            { "name": "Kenya", "valueUsdK": 6.39, "quantityKg": 1310 },
+            { "name": "Togo", "valueUsdK": 3.74, "quantityKg": 3500 },
+            { "name": "Congo, Dem. Rep.", "valueUsdK": 2.65, "quantityKg": 1245 },
+            { "name": "India", "valueUsdK": 1.66, "quantityKg": 233 },
+            { "name": "Bahrain", "valueUsdK": 0.96, "quantityKg": 25 },
+            { "name": "Cameroon", "valueUsdK": 0.84, "quantityKg": 206 },
+            { "name": "Singapore", "valueUsdK": 0.6, "quantityKg": 2 },
+            { "name": "Maldives", "valueUsdK": 0.17, "quantityKg": 5 },
+            { "name": "Saudi Arabia", "valueUsdK": 0.14, "quantityKg": 58 },
+            { "name": "Qatar", "valueUsdK": 0.13, "quantityKg": 39 },
+            { "name": "Uganda", "valueUsdK": 0.13, "quantityKg": 2 },
+            { "name": "United States", "valueUsdK": 0.03, "quantityKg": 0 },
+            { "name": "Kuwait", "valueUsdK": 0.01, "quantityKg": 0 }
+          ]
+        },
+        {
+          "year": 2023,
+          "hs6": "681390",
+          "description": "Asbestos friction material and articles nes",
+          "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/ARE/year/2023/tradeflow/Exports/partner/ALL/product/681390",
+          "totalValueUsdK": 2085.17,
+          "totalQuantityKg": 601298,
+          "countries": [
+            { "name": "Saudi Arabia", "valueUsdK": 1333.29, "quantityKg": 435195 },
+            { "name": "Uzbekistan", "valueUsdK": 182.21, "quantityKg": 23149 },
+            { "name": "Iraq", "valueUsdK": 169.3, "quantityKg": 33111 },
+            { "name": "Kyrgyz Republic", "valueUsdK": 145.65, "quantityKg": 19058 },
+            { "name": "Kuwait", "valueUsdK": 61.36, "quantityKg": 4562 },
+            { "name": "Qatar", "valueUsdK": 57.75, "quantityKg": 70171 },
+            { "name": "Egypt, Arab Rep.", "valueUsdK": 29.08, "quantityKg": 3188 },
+            { "name": "Oman", "valueUsdK": 26.66, "quantityKg": 2250 },
+            { "name": "Afghanistan", "valueUsdK": 19.14, "quantityKg": 2328 },
+            { "name": "Jordan", "valueUsdK": 10.16, "quantityKg": 5039 },
+            { "name": "Croatia", "valueUsdK": 9.53, "quantityKg": 667 },
+            { "name": "Russian Federation", "valueUsdK": 6.73, "quantityKg": 30 },
+            { "name": "Morocco", "valueUsdK": 6.6, "quantityKg": 3 },
+            { "name": "Pakistan", "valueUsdK": 5.99, "quantityKg": 12 },
+            { "name": "Romania", "valueUsdK": 4.37, "quantityKg": 12 },
+            { "name": "Tanzania", "valueUsdK": 3.59, "quantityKg": 46 },
+            { "name": "India", "valueUsdK": 2.93, "quantityKg": 230 },
+            { "name": "Bahrain", "valueUsdK": 2.86, "quantityKg": 500 },
+            { "name": "China", "valueUsdK": 1.43, "quantityKg": 58 },
+            { "name": "Belgium", "valueUsdK": 1.04, "quantityKg": 52 },
+            { "name": "South Sudan", "valueUsdK": 0.98, "quantityKg": 480 },
+            { "name": "Sudan", "valueUsdK": 0.98, "quantityKg": 480 },
+            { "name": "Djibouti", "valueUsdK": 0.9, "quantityKg": 413 },
+            { "name": "Singapore", "valueUsdK": 0.81, "quantityKg": 25 },
+            { "name": "United States", "valueUsdK": 0.66, "quantityKg": 13 },
+            { "name": "Maldives", "valueUsdK": 0.54, "quantityKg": 2 },
+            { "name": "Canada", "valueUsdK": 0.36, "quantityKg": 191 },
+            { "name": "Libya", "valueUsdK": 0.19, "quantityKg": 0 },
+            { "name": "Kenya", "valueUsdK": 0.04, "quantityKg": 5 },
+            { "name": "Congo, Dem. Rep.", "valueUsdK": 0.03, "quantityKg": 20 },
+            { "name": "Curacao", "valueUsdK": 0.02, "quantityKg": 1 },
+            { "name": "Yemen", "valueUsdK": 0.01, "quantityKg": 5 }
+          ]
+        }
+      ]
+    }
+  ]
+}

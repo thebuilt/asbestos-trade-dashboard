@@ -1,5 +1,6 @@
 const CONFIG = {
   tradeUrl: "./data/trade-data.json",
+  reexportsUrl: "./data/reexports-data.json",
   topoUrl: "./data/countries-110m.json",
   width: 760,
   height: 420
@@ -23,6 +24,13 @@ const dom = {
   exportTopCountry: document.getElementById("export-top-country"),
   exportTopValue: document.getElementById("export-top-value"),
   exportTopQty: document.getElementById("export-top-qty"),
+  relayTitle: document.getElementById("relay-title"),
+  relaySelect: document.getElementById("relay-country-select"),
+  relaySourceLink: document.getElementById("relay-source-link"),
+  relayLegendMax: document.getElementById("relay-legend-max"),
+  relayCountry: document.getElementById("relay-country"),
+  relayTopCountry: document.getElementById("relay-top-country"),
+  relayTopValue: document.getElementById("relay-top-value"),
   mappingBody: document.getElementById("mapping-body"),
   rankingBody: document.getElementById("ranking-body"),
   detailTitle: document.getElementById("detail-title"),
@@ -31,13 +39,15 @@ const dom = {
 
 const state = {
   trade: null,
+  reexports: null,
   topo: null,
   selection: {
     imports: "",
     exports: "aggregate-2023"
   },
   activeSide: "imports",
-  activeCountryName: ""
+  activeCountryName: "",
+  relayTargetCountryName: "United Arab Emirates"
 };
 
 function normalize(value) {
@@ -114,6 +124,13 @@ function cloneDataset(dataset) {
   };
 }
 
+function cloneReexportDataset(dataset, reporter) {
+  const cloned = cloneDataset(dataset);
+  cloned.reporterCode = reporter.reporterCode;
+  cloned.reporterName = reporter.reporterName;
+  return cloned;
+}
+
 function aggregateExportDataset(year) {
   const exportDatasets = state.trade.flows.exports.filter((item) => item.year === year);
   const byCountry = new Map();
@@ -171,6 +188,69 @@ function buildSelections() {
   return { imports, exports };
 }
 
+function buildRelayOptions() {
+  return state.reexports.reporters.map((reporter) => ({
+    value: reporter.reporterCode,
+    label: reporter.reporterName
+  }));
+}
+
+function aggregateRelayDataset(reporter, year) {
+  const datasets = reporter.datasets.filter((item) => item.year === year);
+  const byCountry = new Map();
+
+  datasets.forEach((dataset) => {
+    dataset.countries.forEach((entry) => {
+      const key = canonicalCountryName(entry.name);
+      if (!key) return;
+      const current = byCountry.get(key) || {
+        name: entry.name,
+        valueUsdK: 0,
+        quantityKg: 0
+      };
+      current.valueUsdK += Number(entry.valueUsdK || 0);
+      current.quantityKg += Number(entry.quantityKg || 0);
+      byCountry.set(key, current);
+    });
+  });
+
+  const countries = Array.from(byCountry.values()).sort((a, b) => b.valueUsdK - a.valueUsdK);
+
+  return {
+    key: reporter.reporterCode + "-aggregate-" + year,
+    reporterCode: reporter.reporterCode,
+    reporterName: reporter.reporterName,
+    year: year,
+    hs6: datasets.map((item) => item.hs6).join(", "),
+    description: "Aggregated onward exports for loaded asbestos-linked products",
+    sourceUrl: datasets.map((item) => item.sourceUrl).join("\n"),
+    totalValueUsdK: countries.reduce((sum, entry) => sum + entry.valueUsdK, 0),
+    totalQuantityKg: countries.reduce((sum, entry) => sum + entry.quantityKg, 0),
+    countries: countries
+  };
+}
+
+function findRelayReporterByName(name) {
+  return state.reexports.reporters.find((reporter) => {
+    return canonicalCountryName(reporter.reporterName) === canonicalCountryName(name);
+  }) || null;
+}
+
+function currentRelayDataset(exportDataset) {
+  const requestedReporter = findRelayReporterByName(state.relayTargetCountryName);
+  if (!requestedReporter) return null;
+
+  if (exportDataset.key.indexOf("aggregate-") === 0) {
+    return aggregateRelayDataset(requestedReporter, exportDataset.year);
+  }
+
+  const exact = requestedReporter.datasets.find((dataset) => {
+    return dataset.year === exportDataset.year && dataset.hs6 === exportDataset.hs6;
+  });
+
+  return exact ? cloneReexportDataset(Object.assign({ key: requestedReporter.reporterCode + "-" + exact.hs6 + "-" + exact.year }, exact), requestedReporter) : null;
+}
+
 function fillSelect(selectEl, options, selectedValue) {
   selectEl.innerHTML = "";
   options.forEach((option) => {
@@ -224,6 +304,27 @@ function setSummary(side, dataset) {
     dom.exportTopValue.textContent = top ? formatUsdK(top.valueUsdK) : "-";
     dom.exportTopQty.textContent = top ? formatKg(top.quantityKg) : "-";
   }
+}
+
+function setRelaySummary(dataset) {
+  if (!dataset) {
+    dom.relayTitle.textContent = "No relay dataset loaded";
+    dom.relaySourceLink.href = "#";
+    dom.relayLegendMax.textContent = "-";
+    dom.relayCountry.textContent = state.relayTargetCountryName || "-";
+    dom.relayTopCountry.textContent = "-";
+    dom.relayTopValue.textContent = "-";
+    return;
+  }
+
+  const ranked = dataset.countries.slice().sort((a, b) => b.valueUsdK - a.valueUsdK);
+  const top = ranked[0];
+  dom.relayTitle.textContent = dataset.reporterName + " onward exports";
+  dom.relaySourceLink.href = dataset.sourceUrl.split("\n")[0];
+  dom.relayLegendMax.textContent = top ? formatUsdK(top.valueUsdK) : "-";
+  dom.relayCountry.textContent = dataset.reporterName;
+  dom.relayTopCountry.textContent = top ? top.name : "-";
+  dom.relayTopValue.textContent = top ? formatUsdK(top.valueUsdK) : "-";
 }
 
 function renderRanking(side, dataset, countryName) {
@@ -368,6 +469,9 @@ function renderMap(side, dataset, svgId) {
       const rawName = feature.properties && feature.properties.name ? feature.properties.name : "";
       state.activeSide = side;
       state.activeCountryName = rawName;
+      if (side === "exports") {
+        state.relayTargetCountryName = rawName;
+      }
       renderDashboard();
     });
 
@@ -375,6 +479,18 @@ function renderMap(side, dataset, svgId) {
   document.getElementById(side === "imports" ? "import-zoom-in" : "export-zoom-in").onclick = zoom.zoomIn;
   document.getElementById(side === "imports" ? "import-zoom-out" : "export-zoom-out").onclick = zoom.zoomOut;
   document.getElementById(side === "imports" ? "import-zoom-reset" : "export-zoom-reset").onclick = zoom.reset;
+}
+
+function renderRelayMap(dataset) {
+  if (!dataset) {
+    renderMap("relay", {
+      countries: [],
+      description: "No relay dataset available"
+    }, "#relay-map");
+    return;
+  }
+
+  renderMap("relay", dataset, "#relay-map");
 }
 
 function currentDataset(side) {
@@ -386,13 +502,22 @@ function currentDataset(side) {
 function renderDashboard() {
   const importDataset = currentDataset("imports");
   const exportDataset = currentDataset("exports");
+  const relayDataset = currentRelayDataset(exportDataset);
 
   populateStats(importDataset, exportDataset);
   setSummary("imports", importDataset);
   setSummary("exports", exportDataset);
+  setRelaySummary(relayDataset);
   renderMap("imports", importDataset, "#import-map");
   renderMap("exports", exportDataset, "#export-map");
+  renderRelayMap(relayDataset);
   renderRanking(state.activeSide, state.activeSide === "imports" ? importDataset : exportDataset, state.activeCountryName);
+
+  if (!relayDataset) {
+    dom.detailTitle.textContent = state.relayTargetCountryName || "Relay partner";
+    dom.detailBody.textContent =
+      "No onward-export dataset is loaded yet for this clicked export partner. The current relay layer is seeded for the United Arab Emirates so we can investigate whether a hub market is redistributing the same HS product to other destinations.";
+  }
 }
 
 function bindEvents() {
@@ -409,21 +534,31 @@ function bindEvents() {
     state.activeCountryName = "";
     renderDashboard();
   });
+
+  dom.relaySelect.addEventListener("change", function (event) {
+    const reporter = state.reexports.reporters.find((item) => item.reporterCode === event.target.value);
+    state.relayTargetCountryName = reporter ? reporter.reporterName : "";
+    renderDashboard();
+  });
 }
 
 async function init() {
-  const [trade, topo] = await Promise.all([
+  const [trade, reexports, topo] = await Promise.all([
     d3.json(CONFIG.tradeUrl),
+    d3.json(CONFIG.reexportsUrl),
     d3.json(CONFIG.topoUrl)
   ]);
 
   state.trade = trade;
+  state.reexports = reexports;
   state.topo = topo;
   state.selection.imports = trade.flows.imports[0].hs6 + "-" + trade.flows.imports[0].year;
 
   const selections = buildSelections();
+  const relayOptions = buildRelayOptions();
   fillSelect(dom.importSelect, selections.imports, state.selection.imports);
   fillSelect(dom.exportSelect, selections.exports, state.selection.exports);
+  fillSelect(dom.relaySelect, relayOptions, relayOptions[0] ? relayOptions[0].value : "");
   renderMappings();
   bindEvents();
   renderDashboard();

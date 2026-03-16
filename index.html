@@ -169,6 +169,52 @@
       <article class="panel compact-panel">
         <div class="panel-head">
           <div>
+            <p class="panel-kicker">Re-export Trail</p>
+            <h2 id="relay-title">Click an export partner</h2>
+          </div>
+          <a id="relay-source-link" class="source-link" href="#" target="_blank" rel="noreferrer">Open re-export source</a>
+        </div>
+        <div class="toolbar relay-toolbar">
+          <label class="field">
+            <span>Relay Partner</span>
+            <select id="relay-country-select"></select>
+          </label>
+          <div class="legend-block">
+            <span class="legend-label">Gradient</span>
+            <div class="legend-bar export-gradient"></div>
+            <div class="legend-range">
+              <span>Lower</span>
+              <span id="relay-legend-max">Higher</span>
+            </div>
+          </div>
+        </div>
+        <div class="map-frame">
+          <div class="map-tools">
+            <button id="relay-zoom-in" class="zoom-btn" type="button">+</button>
+            <button id="relay-zoom-out" class="zoom-btn" type="button">-</button>
+            <button id="relay-zoom-reset" class="zoom-btn wide" type="button">Reset</button>
+          </div>
+          <svg id="relay-map" viewBox="0 0 760 420" aria-label="World map of onward exports from the clicked partner"></svg>
+        </div>
+        <div class="map-summary">
+          <div>
+            <span class="summary-label">Relay partner</span>
+            <strong id="relay-country">-</strong>
+          </div>
+          <div>
+            <span class="summary-label">Top onward market</span>
+            <strong id="relay-top-country">-</strong>
+          </div>
+          <div>
+            <span class="summary-label">Top onward value</span>
+            <strong id="relay-top-value">-</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel compact-panel">
+        <div class="panel-head">
+          <div>
             <p class="panel-kicker">India HSN Mapping</p>
             <h2>Source Codes</h2>
           </div>

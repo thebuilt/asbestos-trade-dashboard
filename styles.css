@@ -280,7 +280,7 @@ svg.dragging {
 
 .bottom-grid {
   margin-top: 14px;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1.15fr 1fr 1fr;
 }
 
 .table-wrap {
@@ -324,6 +324,10 @@ td {
 
 .rank-wrap {
   max-height: 420px;
+}
+
+.relay-toolbar {
+  grid-template-columns: minmax(220px, 280px) 1fr;
 }
 
 .footnote {
