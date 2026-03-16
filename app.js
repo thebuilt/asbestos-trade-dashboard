@@ -480,7 +480,8 @@ function renderMap(side, dataset, svgId) {
       }
       if (side === "exports") {
         state.relayTargetCountryName = rawName;
-        dom.relaySelect.value = findRelayReporterByName(rawName)?.reporterCode || dom.relaySelect.value;
+        var matchedReporter = findRelayReporterByName(rawName);
+        dom.relaySelect.value = matchedReporter ? matchedReporter.reporterCode : dom.relaySelect.value;
       }
       if (side !== "relay") {
         renderDashboard();
